@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "@/components/Providers";
-import TopNav from "@/components/TopNav";
+import TopNav from "@/components/navbar/TopNav";
 
 export const metadata: Metadata = {
   title: "Next Chat App",
@@ -18,7 +18,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <TopNav />
-          {children}
+          <main className="container mx-auto p-10">{children}</main>
         </Providers>
       </body>
     </html>

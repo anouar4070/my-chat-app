@@ -1,10 +1,23 @@
+"use client";
+
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import React from "react";
 import { GiPadlock } from "react-icons/gi";
+import { useForm } from "react-hook-form";
 
 export default function LoginForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm();
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
+
   return (
     <Card className="w-2/5 mx-auto">
       <CardHeader className="flex flex-col items-center justify-center">
@@ -13,22 +26,35 @@ export default function LoginForm() {
             <GiPadlock size={30} />
             <h1 className="text-3xl font-semibold">Login</h1>
           </div>
-          <p className='text-neutral-500'>Welcome back to NextChat</p>
+          <p className="text-neutral-500">Welcome back to NextChat</p>
         </div>
       </CardHeader>
       <CardBody>
-        <form action="">
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
             <Input
-            label='Email'
-            variant='bordered'
+              defaultValue=""
+              label="Email"
+              variant="bordered"
+              {...register("email", { required: "Email is required" })}
+              isInvalid={!!errors.email}
+              errorMessage={errors.email?.message as string}
             />
-             <Input
-            label='Password'
-            variant='bordered'
-            type='password'
+            <Input
+              defaultValue=""
+              label="Password"
+              variant="bordered"
+              type="password"
+              {...register("password", { required: "Password is required" })}
+              isInvalid={!!errors.password}
+              errorMessage={errors.password?.message as string}
             />
-            <Button fullWidth color='secondary' type='submit'>
+            <Button
+              isDisabled={!isValid}
+              fullWidth
+              color="secondary"
+              type="submit"
+            >
               Login
             </Button>
           </div>

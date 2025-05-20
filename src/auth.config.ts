@@ -14,7 +14,7 @@ export default {
         if (validated.success) {
           const { email, password } = validated.data;
 
-          const user = getUserByEmail(email);
+          const user = await getUserByEmail(email);
 
           if (!user || !(await compare(password, user.passwordHash)))
             return null;

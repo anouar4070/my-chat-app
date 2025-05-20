@@ -96,3 +96,17 @@ export default function RegisterForm() {
     </Card>
   );
 }
+
+/**
+ errors: Comes from useForm() of react-hook-form, it contains all the validation errors.
+
+errors.root: Represents global (form-level) errors, added with setError("root.XXX").
+
+errors.root?.serverError: If a serverError has been defined → the block is rendered.
+
+<p className="text-danger text-sm">...</p>: The error message displayed in a paragraph styled in red (likely using Tailwind CSS or Bootstrap).
+
+   ****Element	****                     |  ****  Role ****
+setError("root.serverError", ...)	       |    Adds a general (non-field-specific) error.
+errors.root?.serverError	               |    Accesses this error to display it in the interface.
+ */

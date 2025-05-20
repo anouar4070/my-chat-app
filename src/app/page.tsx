@@ -34,3 +34,18 @@ export default async function Home() {
     </div>
   );
 }
+
+/**
+ <form
+  action={async () => {
+    "use server";
+    await signOut();
+  }}
+>
+   ✅ Why this works:
+action={...}: This uses Next.js Server Actions, a new way to handle form submissions server-side without having to create a separate API route.
+
+"use server": This directive marks the function as a server action—Next.js will run this function only on the server, not in the browser.
+
+await signOut(): You can call server-only logic (like auth functions, database calls, etc.) directly in this action.
+ */

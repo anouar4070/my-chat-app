@@ -14,3 +14,16 @@ if(!member) return notFound()
     </div>
   )
 }
+
+//    *** Old Way with Next14 ***
+// export default async function MemberDetailedPage({params}
+//   : {params: {userId: string} }) {
+
+// const member = await getMemberByUserId(params.userId)
+// if(!member) return notFound()
+//   return (
+//     <div>
+//      {member.name}
+//     </div>
+//   )
+// }

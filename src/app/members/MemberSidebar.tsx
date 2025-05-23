@@ -1,3 +1,4 @@
+"use client";
 import { calculateAge } from "@/lib/util";
 import {
   Button,
@@ -7,6 +8,11 @@ import {
   Divider,
   Image,
 } from "@heroui/react";
+// import { Button } from "@heroui/button";
+// import { Card, CardBody, CardFooter } from "@heroui/card";
+// import { Divider } from "@heroui/divider";
+// import { Image } from "@heroui/image";
+
 import { Member } from "@prisma/client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -76,3 +82,4 @@ export default function MemberSidebar({ member }: Props) {
     </Card>
   );
 }
+

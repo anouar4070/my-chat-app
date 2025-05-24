@@ -30,3 +30,15 @@ export default function Error({
     </div>
   );
 }
+
+
+// With "use client":
+// - React boundary (error.tsx) can catch UI errors
+// - Runs in browser, can throw interactive errors
+// - Needed for interactive components + hooks like useRouter
+
+// Without "use client":
+// - React boundary cannot catch — error is server-only
+// - Runs only on server, errors handled in server logs
+// - Limited to static or server-rendered logic
+

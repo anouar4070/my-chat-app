@@ -10,7 +10,7 @@ import { Member, Photo } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 export async function updateMemberProfile(
-  data: MemberEditSchema
+  data: MemberEditSchema, nameUpdated: boolean
 ): Promise<ActionResult<Member>> {
   try {
     const userId = await getAuthUserId();
@@ -20,6 +20,13 @@ export async function updateMemberProfile(
       return { status: "error", error: validated.error.errors };
 
     const { name, description, city, country } = validated.data;
+
+    if (nameUpdated) {
+      await prisma.user.update({
+        where: {id: userId},
+        data: {name}
+      })
+    }
 
     const member = await prisma.member.update({
       where: { userId },
@@ -78,3 +85,16 @@ export async function setMainImage(photo: Photo) {
     throw error;
   }
 }
+
+export async function getUserInfoForNav() {
+  try {
+    const userId = await getAuthUserId();
+    return prisma.user.findUnique({
+      where: {id: userId},
+      select: {name: true, image: true}
+    })
+  } catch (error) {
+      console.log(error);
+    throw error;
+  }
+  }

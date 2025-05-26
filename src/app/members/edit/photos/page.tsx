@@ -6,7 +6,7 @@ import { getMemberPhotosByUserId } from "@/app/actions/memberActions";
 import { Image } from "@heroui/image";
 import StarButton from "@/components/StarButton";
 import DeleteButton from "@/components/DeleteButton";
-import ImageUploadButton from "@/components/ImageUploadButton";
+import MemberPhotoUpload from "./MemberPhotoUpload";
 
 export default async function PhotosPage() {
   const userId = await getAuthUserId();
@@ -19,9 +19,7 @@ export default async function PhotosPage() {
       </CardHeader>
       <Divider />
       <CardBody>
-        <div className="pt-5 pl-5">
-          <ImageUploadButton />
-        </div>
+     <MemberPhotoUpload />
 
         <div className="grid grid-cols-5 gap-3 p-5">
           {photos &&

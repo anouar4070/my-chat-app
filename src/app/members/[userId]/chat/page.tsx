@@ -27,3 +27,8 @@ export default async function ChatPage({params}: {params: Promise<{userId: strin
     />
   );
 }
+
+
+/**
+  The page.tsx is inside a dynamic route folder (e.g., /members/[userId]/chat), Next.js automatically passes a params object to the page component. This object contains the dynamic segments of the URL.
+ */

@@ -26,6 +26,10 @@ export default function MessageSidebar() {
     params.set("container", key);
     router.replace(`${pathname}?${params}`);
   };
+  /**
+   http://localhost:3001/messages?container=inbox
+   http://localhost:3001/messages?container=outbox
+   */
 
   return (
     <div className="flex flex-col shadow-md rounded-lg cursor-pointer">
@@ -50,11 +54,25 @@ export default function MessageSidebar() {
 }
 
 /**
- 👉 useSearchParams() comes from React Router (v6+).
+ ☝
+  ✅ useSearchParams() comes from React Router (v6+).
 It gives you a special object (kind of like URLSearchParams) that lets you read the URL query parameters after the ?.
 
 For example, if your URL is:
 http://localhost:3000/messages?container=sent
 Then:
 searchParams.get("container") will return "sent".
+
+✌
+✅ router.replace(...) → this updates the URL without reloading the page.
+So effectively:
+router.replace(`${pathname}?${params}`);
+// becomes something like:
+router.replace(`/messages?container=inbox`);
+BUT — where does pathname come from?
+That depends on what framework or router you’re using.
+
+For example:
+In Next.js → you usually get it from usePathname() or router.pathname.
+In React Router → you can get it from useLocation().pathname.
  */

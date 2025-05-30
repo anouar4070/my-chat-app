@@ -13,8 +13,10 @@ import {
   //getKeyValue,
 } from "@heroui/table";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Key, useCallback } from "react";
+import { Key, useCallback, useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
+import { deleteMessage } from "../actions/messageActions";
+import { truncateString } from "@/lib/util";
 
 type Props = {
   messages: MessageDto[];
@@ -24,7 +26,8 @@ export default function MessageTable({ messages }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const isOutbox = searchParams.get("container") === "outbox";
-   // Define table columns depending on inbox/outbox
+  const [isDeleting, setDeleting] = useState({ id: "", loading: false });
+  // Define table columns depending on inbox/outbox
   const columns = [
     {
       key: isOutbox ? "recipientName" : "senderName",
@@ -34,6 +37,16 @@ export default function MessageTable({ messages }: Props) {
     { key: "created", label: isOutbox ? "Date sent" : "Date received" },
     { key: "actions", label: "Actions" },
   ];
+
+  const handleDeleteMessage = useCallback(
+    async (message: MessageDto) => {
+      setDeleting({ id: message.id, loading: true });
+      await deleteMessage(message.id, isOutbox);
+      router.refresh();
+      setDeleting({ id: "", loading: false });
+    },
+    [isOutbox, router]
+  );
 
   // Function called when a row is clicked → navigate to the chat page
   const handleRowSelect = (key: Key) => {
@@ -53,9 +66,7 @@ export default function MessageTable({ messages }: Props) {
         case "recipientName":
         case "senderName":
           return (
-            <div
-              className="flex items-center gap-2 cursor-pointer" > 
-           
+            <div className="flex items-center gap-2 cursor-pointer">
               <Avatar
                 alt="Image of member"
                 src={
@@ -67,18 +78,23 @@ export default function MessageTable({ messages }: Props) {
             </div>
           );
         case "text":
-          return <div className="truncate">{cellValue}</div>; // truncate long text
+          return <div>{truncateString(cellValue, 80)}</div>; // truncate long text
         case "created":
-          return cellValue;  // just show the date/time
+          return cellValue; // just show the date/time
         default:
           return (
-            <Button isIconOnly variant="light">
+            <Button
+              isIconOnly
+              variant="light"
+              onPress={() => handleDeleteMessage(item)}
+              isLoading={isDeleting.id === item.id && isDeleting.loading}
+            >
               <AiFillDelete size={24} className="text-danger" />
             </Button>
           );
       }
     },
-    [isOutbox]
+    [isOutbox, isDeleting.id, isDeleting.loading, handleDeleteMessage]
   );
 
   return (
@@ -91,16 +107,22 @@ export default function MessageTable({ messages }: Props) {
       >
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key}>{column.label}</TableColumn> // render table header
+            <TableColumn key={column.key} width={column.key === 'text' ? '50%' : undefined}>
+              {column.label}
+              </TableColumn> // render table header
           )}
         </TableHeader>
         <TableBody items={messages}>
           {(item) => (
             <TableRow key={item.id} className="cursor-pointer">
               {(columnKey) => (
-                <TableCell className={`${!item.dateRead && !isOutbox ? "font-semibold" : ""
-              }`}>
-                {renderCell(item, columnKey as keyof MessageDto)} {/* render each cell */}
+                <TableCell
+                  className={`${
+                    !item.dateRead && !isOutbox ? "font-semibold" : ""
+                  }`}
+                >
+                  {renderCell(item, columnKey as keyof MessageDto)}{" "}
+                  {/* render each cell */}
                 </TableCell>
               )}
             </TableRow>

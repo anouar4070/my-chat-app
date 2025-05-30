@@ -54,10 +54,8 @@ export default function MessageTable({ messages }: Props) {
         case "senderName":
           return (
             <div
-              className={`flex items-center gap-2 cursor-pointer ${
-                !item.dateRead && !isOutbox ? "font-semibold" : ""
-              }`}
-            >
+              className="flex items-center gap-2 cursor-pointer" > 
+           
               <Avatar
                 alt="Image of member"
                 src={
@@ -100,7 +98,8 @@ export default function MessageTable({ messages }: Props) {
           {(item) => (
             <TableRow key={item.id} className="cursor-pointer">
               {(columnKey) => (
-                <TableCell>
+                <TableCell className={`${!item.dateRead && !isOutbox ? "font-semibold" : ""
+              }`}>
                 {renderCell(item, columnKey as keyof MessageDto)} {/* render each cell */}
                 </TableCell>
               )}

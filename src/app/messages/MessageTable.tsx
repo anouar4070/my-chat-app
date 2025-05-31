@@ -107,9 +107,12 @@ export default function MessageTable({ messages }: Props) {
       >
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key} width={column.key === 'text' ? '50%' : undefined}>
+            <TableColumn
+              key={column.key}
+              width={column.key === "text" ? "50%" : undefined}
+            >
               {column.label}
-              </TableColumn> // render table header
+            </TableColumn> // render table header
           )}
         </TableHeader>
         <TableBody items={messages}>

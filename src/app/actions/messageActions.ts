@@ -1,16 +1,17 @@
 "use server";
 
 import { messageSchema, MessageSchema } from "@/lib/schemas/messageSchema";
-import { ActionResult } from "@/types";
-import { Message } from "@prisma/client";
+import { ActionResult, MessageDto } from "@/types";
 import { getAuthUserId } from "./authActions";
 import { prisma } from "@/lib/prisma";
 import { mapMessageToMessageDto } from "@/lib/mappings";
+import { pusherServer } from "@/lib/pusher";
+import { createChatId } from "@/lib/util";
 
 export async function createMessage(
   recipientUserId: string,
   data: MessageSchema
-): Promise<ActionResult<Message>> {
+): Promise<ActionResult<MessageDto>> {
   try {
     const userId = await getAuthUserId();
 
@@ -27,9 +28,18 @@ export async function createMessage(
         recipientId: recipientUserId,
         senderId: userId,
       },
+      select: messageSelect,
     });
 
-    return { status: "success", data: message };
+    const messageDto = mapMessageToMessageDto(message);
+
+    await pusherServer.trigger(
+      createChatId(userId, recipientUserId),
+      "message:new",
+      messageDto
+    );
+
+    return { status: "success", data: messageDto };
   } catch (error) {
     console.log(error);
     return { status: "error", error: "Something went wrong" };
@@ -58,26 +68,7 @@ export async function getMessageThread(recipientId: string) {
       orderBy: {
         created: "asc",
       },
-      select: {
-        id: true,
-        text: true,
-        created: true,
-        dateRead: true,
-        sender: {
-          select: {
-            userId: true,
-            name: true,
-            image: true,
-          },
-        },
-        recipient: {
-          select: {
-            userId: true,
-            name: true,
-            image: true,
-          },
-        },
-      },
+      select: messageSelect,
     });
 
     if (messages.length > 0) {
@@ -126,26 +117,7 @@ export async function getMessagesByContainer(container: string) {
       orderBy: {
         created: "desc",
       },
-      select: {
-        id: true,
-        text: true,
-        created: true,
-        dateRead: true,
-        sender: {
-          select: {
-            userId: true,
-            name: true,
-            image: true,
-          },
-        },
-        recipient: {
-          select: {
-            userId: true,
-            name: true,
-            image: true,
-          },
-        },
-      },
+      select: messageSelect,
     });
 
     return messages.map((message) => mapMessageToMessageDto(message));
@@ -200,3 +172,37 @@ export async function deleteMessage(messageId: string, isOutbox: boolean) {
     throw error;
   }
 }
+
+const messageSelect = {
+  id: true,
+  text: true,
+  created: true,
+  dateRead: true,
+  sender: {
+    select: {
+      userId: true,
+      name: true,
+      image: true,
+    },
+  },
+  recipient: {
+    select: {
+      userId: true,
+      name: true,
+      image: true,
+    },
+  },
+};
+
+/**
+ 🌟 Why use mapMessageToMessageDto()?
+
+message → the raw database object (from Prisma), often containing extra or sensitive data (like internal IDs, timestamps, nested relations).
+
+messageDto → a cleaned, formatted version specifically prepared for the frontend, sent via Pusher.
+
+This Data Transfer Object (DTO) helps:
+✅ Avoid exposing unnecessary or sensitive data.
+✅ Provide a clear and stable structure for the frontend.
+✅ Adapt or enrich data (e.g., format dates, add computed fields).
+ */

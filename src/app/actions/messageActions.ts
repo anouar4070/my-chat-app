@@ -34,10 +34,10 @@ export async function createMessage(
     const messageDto = mapMessageToMessageDto(message);
 
     await pusherServer.trigger(
-      createChatId(userId, recipientUserId),
-      "message:new",
-      messageDto
-    );
+      createChatId(userId, recipientUserId), // → channel name
+      "message:new",                        // → event name
+      messageDto                           // → payload (the message data)
+    ); 
 
     return { status: "success", data: messageDto };
   } catch (error) {

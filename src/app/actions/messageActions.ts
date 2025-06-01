@@ -35,9 +35,9 @@ export async function createMessage(
 
     await pusherServer.trigger(
       createChatId(userId, recipientUserId), // → channel name
-      "message:new",                        // → event name
-      messageDto                           // → payload (the message data)
-    ); 
+      "message:new", // → event name
+      messageDto // → payload (the message data)
+    );
 
     return { status: "success", data: messageDto };
   } catch (error) {
@@ -72,14 +72,17 @@ export async function getMessageThread(recipientId: string) {
     });
 
     if (messages.length > 0) {
+      const readMessageIds = messages
+      .filter( (m) => m.dateRead === null 
+      && m.recipient?.userId === userId
+       && m.sender?.userId === recipientId )
+       .map(m => m.id)    // [{ id: 1, ... }, { id: 7, ... }]  ==>  [1, 7]
+
       await prisma.message.updateMany({
-        where: {
-          senderId: recipientId,
-          recipientId: userId,
-          dateRead: null,
-        },
+        where: {id: {in: readMessageIds}},
         data: { dateRead: new Date() },
-      });
+      })
+      await pusherServer.trigger(createChatId(recipientId, userId), 'messages:read', readMessageIds)
     }
 
     return messages.map((message) => mapMessageToMessageDto(message));

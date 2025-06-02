@@ -15,7 +15,7 @@ const usePresenceStore = create<PresenceState>()(devtools((set) => ({
   remove: (id) => set((state) => ({members: state.members.filter(member => member !== id)})),
   set: (ids) => set({members: ids})
 }),
-{name: 'PresenceStore'}  // Devtools store name
+{name: 'PresenceStoreDemo'}  // Devtools store name
 ))
 
 export default usePresenceStore;

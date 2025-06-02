@@ -2,16 +2,19 @@ import { useCallback, useEffect, useRef } from "react";
 import usePresenceStore from "./usePresenceStore"
 import { Channel, Members } from "pusher-js";
 import { pusherClient } from "@/lib/pusher";
+import {useShallow} from 'zustand/shallow';
 
 // Custom React hook to manage a Pusher presence channel
 export const usePresenceChannel = () => {
 
   // Extract set, add, and remove functions from the presence store 
-  const {set, add, remove} = usePresenceStore(state => ({
+  const {set, add, remove} = usePresenceStore(
+    useShallow(  // <-- should be used with zustand 5
+    state => ({
     set: state.set,
     add: state.add,
     remove: state.remove,
-  }));
+  })));
 
 // Ref to hold the Pusher channel instance
 const channelRef = useRef<Channel | null>(null)

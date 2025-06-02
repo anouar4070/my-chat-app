@@ -18,19 +18,21 @@ export default function MessageList({
   currentUserId,
   chatId,
 }: Props) {
-  //const setReadCount = useRef(false); 
+  //const setReadCount = useRef(false);
+
+  //creating a persistent reference that will hold a Channel object (from Pusher) or null.
   const channelRef = useRef<Channel | null>(null);
   const [messages, setMessages] = useState(initialMessages);
 
-// const {updateUnreadCount} = useMessageStore(state => ({
-//   updateUnreadCount: state.updateUnreadCount
-// }))
-// useEffect(() => {
-//  if(!setReadCount.current) {
-//   updateUnreadCount(-initialMessages.readCount);
-//   setReadCount.current = true;
-//  }
-// }, [initialMessages.readCount, updateUnreadCount])
+  // const {updateUnreadCount} = useMessageStore(state => ({
+  //   updateUnreadCount: state.updateUnreadCount
+  // }))
+  // useEffect(() => {
+  //  if(!setReadCount.current) {
+  //   updateUnreadCount(-initialMessages.readCount);
+  //   setReadCount.current = true;
+  //  }
+  // }, [initialMessages.readCount, updateUnreadCount])
 
   const handleNewMessage = useCallback((message: MessageDto) => {
     setMessages((prevState) => {

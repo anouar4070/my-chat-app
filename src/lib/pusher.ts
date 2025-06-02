@@ -21,8 +21,8 @@ if (!global.pusherClientInstance) {
   global.pusherClientInstance = new PusherClient(
     process.env.NEXT_PUBLIC_PUSHER_APP_KEY!, {
       channelAuthorization: {
-        endpoint: '/api/pusher-auth',
-        transport: 'ajax'
+        endpoint: '/api/pusher-auth', // API route that will handle private/presence channel auth
+        transport: 'ajax' // Use AJAX to send the authorization request
       },
       cluster: "ap1"
     });

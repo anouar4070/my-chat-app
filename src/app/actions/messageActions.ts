@@ -39,7 +39,7 @@ export async function createMessage(
       messageDto // → payload (the message data)
     );
 
-     await pusherServer.trigger(
+    await pusherServer.trigger(
       `private-${recipientUserId}`, // → private channel name
       "message:new", // → event name
       messageDto // → payload (the message data)
@@ -79,16 +79,23 @@ export async function getMessageThread(recipientId: string) {
 
     if (messages.length > 0) {
       const readMessageIds = messages
-      .filter( (m) => m.dateRead === null 
-      && m.recipient?.userId === userId
-       && m.sender?.userId === recipientId )
-       .map(m => m.id)    // [{ id: 1, ... }, { id: 7, ... }]  ==>  [1, 7]
+        .filter(
+          (m) =>
+            m.dateRead === null &&
+            m.recipient?.userId === userId &&
+            m.sender?.userId === recipientId
+        )
+        .map((m) => m.id); // [{ id: 1, ... }, { id: 7, ... }]  ==>  [1, 7]
 
       await prisma.message.updateMany({
-        where: {id: {in: readMessageIds}},
+        where: { id: { in: readMessageIds } },
         data: { dateRead: new Date() },
-      })
-      await pusherServer.trigger(createChatId(recipientId, userId), 'messages:read', readMessageIds)
+      });
+      await pusherServer.trigger(
+        createChatId(recipientId, userId),
+        "messages:read",
+        readMessageIds
+      );
     }
 
     return messages.map((message) => mapMessageToMessageDto(message));
@@ -176,6 +183,23 @@ export async function deleteMessage(messageId: string, isOutbox: boolean) {
         },
       });
     }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getUnreadMessageCount() {
+  try {
+    const userId = await getAuthUserId();
+
+    await prisma.message.count({
+      where: {
+        recipientId: userId,
+        dateRead: null,
+        recipientDeleted: false,
+      },
+    });
   } catch (error) {
     console.log(error);
     throw error;

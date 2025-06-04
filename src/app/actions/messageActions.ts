@@ -39,6 +39,12 @@ export async function createMessage(
       messageDto // → payload (the message data)
     );
 
+     await pusherServer.trigger(
+      `private-${recipientUserId}`, // → private channel name
+      "message:new", // → event name
+      messageDto // → payload (the message data)
+    );
+
     return { status: "success", data: messageDto };
   } catch (error) {
     console.log(error);

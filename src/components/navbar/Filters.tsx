@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Select, SelectItem, Slider } from "@heroui/react";
+import { Button, Select, SelectItem, Slider, Selection } from "@heroui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { FaFemale, FaMale } from "react-icons/fa";
@@ -9,7 +9,6 @@ export default function Filters() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-
 
   const orderByList = [
     { label: "Last active", value: "updated" },
@@ -25,6 +24,14 @@ export default function Filters() {
     const params = new URLSearchParams(searchParams); // /members?gender=male, so gender=male
     params.set("ageRange", value.join(",")); // if value is [25, 35], sets ageRange=25,35
     router.replace(`${pathname}?${params}`); // navigates to /members?gender=male&ageRange=25%2C35 without page reload
+  };
+
+  const handleOrderSelect = (value: Selection) => {
+    if (value instanceof Set) {
+      const params = new URLSearchParams(searchParams);
+      params.set("orderBy", value.values().next().value as string);
+      router.replace(`${pathname}?${params}`);
+    }
   };
 
   if (pathname !== "/members") return null;
@@ -57,10 +64,12 @@ export default function Filters() {
           <Select
             size="sm"
             fullWidth
-            placeholder="Order by"
+            label="Order by"
             variant="bordered"
             color="secondary"
             aria-label="Order by selector"
+            selectedKeys={new Set([searchParams.get('orderBy')  || 'updated'])}
+            onSelectionChange={handleOrderSelect}
           >
             {orderByList.map((item) => (
               <SelectItem key={item.value}>{item.label}</SelectItem>

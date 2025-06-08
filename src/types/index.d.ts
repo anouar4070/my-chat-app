@@ -7,14 +7,14 @@ type ActionResult<T> =
 
 type MessageWithSenderRecipient = Prisma.MessageGetPayload<{
   select: {
-    id: true,
-    text: true,
-    dateRead: true,
+    id: true;
+    text: true;
+    dateRead: true;
     sender: {
-      select: { userId, name, image }
-    },
+      select: { userId; name; image };
+    };
     recipient: {
-      select: { userId, name, image }
+      select: { userId; name; image };
     };
   };
 }>;
@@ -35,5 +35,20 @@ type MessageDto = {
 type UserFilters = {
   ageRange: number[];
   orderBy: string;
-  gender: string[]
-}
+  gender: string[];
+};
+
+type PagingParams = {
+  pageNumber: number;
+  pageSize: number;
+};
+
+type PagingResult = {
+  totalPages: number;
+  totalCount: number;
+} & PagingParams;
+
+type PaginatedResponse<T> = {
+  items: T[];
+  totalCount: number;
+};

@@ -20,6 +20,8 @@ export default function Filters() {
     { value: "female", icon: FaFemale },
   ];
 
+  const selectedGender = searchParams.get('gender')?.split(',') || ['male', 'female'];
+
   const handleAgeSelect = (value: number[]) => {
     const params = new URLSearchParams(searchParams); // /members?gender=male, so gender=male
     params.set("ageRange", value.join(",")); // if value is [25, 35], sets ageRange=25,35
@@ -27,11 +29,25 @@ export default function Filters() {
   };
 
   const handleOrderSelect = (value: Selection) => {
+    // Check if the passed value is a Set (used by some UI libraries for selection)
     if (value instanceof Set) {
+      // Create a new URLSearchParams object from the existing search parameters
       const params = new URLSearchParams(searchParams);
+      // Get the first value from the Set and set it as the "orderBy" parameter
       params.set("orderBy", value.values().next().value as string);
+      // Update the URL in the browser without a full page reload
       router.replace(`${pathname}?${params}`);
     }
+  };
+
+  const handleGenderSelect = (value: string) => {
+    const params = new URLSearchParams(searchParams);
+if(selectedGender.includes(value)) {
+  params.set('gender', selectedGender.filter(g => g !== value).toString())
+} else {
+  params.set('gender', [...selectedGender, value].toString())
+}
+router.replace(`${pathname}?${params}`);
   };
 
   if (pathname !== "/members") return null;
@@ -43,7 +59,13 @@ export default function Filters() {
         <div className="flex gap-2 items-center">
           <div>Gender:</div>
           {genders.map(({ icon: Icon, value }) => (
-            <Button key={value} size="sm" isIconOnly color="secondary">
+            <Button 
+            key={value} 
+            size="sm" 
+            isIconOnly
+             color={selectedGender.includes(value) ? 'secondary' : 'default'}
+             onPress={() => handleGenderSelect(value)}
+             >
               <Icon size={24} />
             </Button>
           ))}
@@ -68,7 +90,7 @@ export default function Filters() {
             variant="bordered"
             color="secondary"
             aria-label="Order by selector"
-            selectedKeys={new Set([searchParams.get('orderBy')  || 'updated'])}
+            selectedKeys={new Set([searchParams.get("orderBy") || "updated"])}
             onSelectionChange={handleOrderSelect}
           >
             {orderByList.map((item) => (

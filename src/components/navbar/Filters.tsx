@@ -2,16 +2,9 @@
 
 import { useFilters } from "@/hooks/useFilters";
 import { Button, Select, SelectItem, Slider} from "@heroui/react";
-import { usePathname} from "next/navigation";
-import React from "react";
-
 
 export default function Filters() {
-  const pathname = usePathname();
   const { orderByList, genderList, selectAge, selectGender, selectOrder, filters} = useFilters()
-
-
-  if (pathname !== "/members") return null;
 
   return (
     <div className="shadow-md py-2">

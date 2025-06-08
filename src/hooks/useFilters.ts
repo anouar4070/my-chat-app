@@ -41,7 +41,7 @@ useEffect(() => {
   
     const handleOrderSelect = (value: Selection) => {
       if (value instanceof Set) {
-     setFilters('orderBy', value.values().next().value)
+     setFilters('orderBy', value.values().next().value as string)
      
       }
     };

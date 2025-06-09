@@ -11,8 +11,6 @@ import {
   registerSchema,
   RegisterSchema,
 } from "@/lib/schemas/registerSchema";
-import { registerUser } from "@/app/actions/authActions";
-import { handleFormServerErrors } from "@/lib/util";
 import UserDetailsForm from "./UserDetailsForm";
 import ProfileForm from "./ProfileForm";
 

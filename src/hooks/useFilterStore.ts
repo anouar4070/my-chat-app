@@ -20,6 +20,7 @@ const useFilterStore = create<FilterState>()(
       ageRange: [18, 100],
       gender: ["male", "female"],
       orderBy: "updated",
+      withPhoto: true
     },
      // Function to update a specific filter dynamically
     setFilters: (filterName, value) =>

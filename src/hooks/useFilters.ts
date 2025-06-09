@@ -2,8 +2,10 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { FaMale, FaFemale } from "react-icons/fa";
 import useFilterStore from "./useFilterStore";
-import { useEffect, useTransition } from "react";
+import { ChangeEvent, useEffect, useTransition } from "react";
 import { Selection } from "@heroui/react";
+import usePaginationStore from "./usePaginationStore";
+import { useShallow } from "zustand/shallow";
 
 
 export const useFilters = () => {
@@ -14,19 +16,42 @@ export const useFilters = () => {
 const [isPending, startTransition] = useTransition()
 
 const {filters, setFilters} = useFilterStore();
-const {gender, ageRange, orderBy} = filters;
+
+  const {pageNumber, pageSize, setPage, totalCount} = usePaginationStore(
+     useShallow(
+     state => ({
+        pageNumber: state.pagination.pageNumber,
+        pageSize: state.pagination.pageSize,
+        setPage: state.setPage,
+        totalCount: state.pagination.totalCount
+    })));
+
+
+const {gender, ageRange, orderBy, withPhoto} = filters;
+
+useEffect(() => {
+ if(gender || ageRange || orderBy || withPhoto) {
+ setPage(1)
+ }
+}, [gender, ageRange, orderBy, setPage, withPhoto])
+
 
 useEffect(() => {
   startTransition(()=> {
- const searchParams = new URLSearchParams()
+ const searchParams = new URLSearchParams();
+
   if(gender) searchParams.set('gender', gender.join(','));
   if(ageRange) searchParams.set('ageRange', ageRange.toString());
   if(orderBy) searchParams.set('orderBy', orderBy);
+  if(pageSize) searchParams.set('pageSize', pageSize.toString());
+  if(pageNumber) searchParams.set('pageNumber', pageNumber.toString());
+  searchParams.set('withPhoto', withPhoto.toString())
+
 
   router.replace(`${pathname}?${searchParams}`);
   })
  
-}, [gender, ageRange, orderBy, pathname, router])
+}, [gender, ageRange, orderBy, pathname, router, pageNumber, pageSize, withPhoto])
 
 
     const orderByList = [
@@ -56,13 +81,19 @@ useEffect(() => {
     else setFilters('gender', [...gender, value]);
     };
 
+      const handleWithPhotoToggle = (e: ChangeEvent<HTMLInputElement>) => {
+          setFilters('withPhoto', e.target.checked);
+    };
+
     return {
       orderByList,
       genderList,
       selectAge: handleAgeSelect,
       selectGender: handleGenderSelect,
       selectOrder: handleOrderSelect,
+      selectWithPhoto: handleWithPhotoToggle,
       filters,
-      isPending
+      isPending,
+      totalCount
     }
 }

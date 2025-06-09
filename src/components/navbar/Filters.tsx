@@ -1,7 +1,14 @@
 "use client";
 
 import { useFilters } from "@/hooks/useFilters";
-import { Button, Select, SelectItem, Slider, Spinner } from "@heroui/react";
+import {
+  Button,
+  Select,
+  SelectItem,
+  Slider,
+  Spinner,
+  Switch,
+} from "@heroui/react";
 
 export default function Filters() {
   const {
@@ -12,14 +19,18 @@ export default function Filters() {
     selectOrder,
     filters,
     isPending,
+    totalCount,
+    selectWithPhoto
   } = useFilters();
 
   return (
     <div className="shadow-md py-2">
       <div className="flex flex-row justify-around items-center">
         <div className="flex gap-2 items-center">
-          <div className="text-secondary font-semibold text-xl">Results: 10</div>
-          {isPending && <Spinner size='sm' color='secondary' />}
+          <div className="text-secondary font-semibold text-xl">
+            Results:{" "}
+            {isPending ? <Spinner size="sm" color="secondary" /> : totalCount}
+          </div>
         </div>
 
         <div className="flex gap-2 items-center">
@@ -48,6 +59,17 @@ export default function Filters() {
             onChangeEnd={(value) => selectAge(value as number[])}
           />
         </div>
+
+        <div className="flex flex-col items-center">
+          <p className="text-sm">With photo</p>
+          <Switch
+            color="secondary"
+            defaultSelected
+            size="sm"
+            onChange={selectWithPhoto}
+          />
+        </div>
+
         <div className="w-1/4">
           <Select
             size="sm"

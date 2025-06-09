@@ -1,28 +1,26 @@
 "use client";
 
 import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import React from "react";
 import { GiPadlock } from "react-icons/gi";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterSchema } from "@/lib/schemas/registerSchema";
 import { registerUser } from "@/app/actions/authActions";
 import { handleFormServerErrors } from "@/lib/util";
+import UserDetailsForm from "./UserDetailsForm";
 
 export default function RegisterForm() {
-  const {
-    register,
-    setError,
-    handleSubmit,
-    formState: { errors, isValid, isSubmitting },
-  } = useForm<RegisterSchema>({
+  const methods = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     mode: "onTouched",
   });
 
+  const {setError, handleSubmit, formState: { errors, isValid, isSubmitting } } = methods;
+
   const onSubmit = async (data: RegisterSchema) => {
+    //console.log(getValues())
     const result = await registerUser(data);
     if (result.status === "success") {
       console.log("User registered successfully");
@@ -43,33 +41,10 @@ export default function RegisterForm() {
         </div>
       </CardHeader>
       <CardBody>
-        <form onSubmit={handleSubmit(onSubmit)}>
+       <FormProvider {...methods}>
+         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
-            <Input
-              defaultValue=""
-              label="Name"
-              variant="bordered"
-              {...register("name")}
-              isInvalid={!!errors.name}
-              errorMessage={errors.name?.message}
-            />
-            <Input
-              defaultValue=""
-              label="Email"
-              variant="bordered"
-              {...register("email")}
-              isInvalid={!!errors.email}
-              errorMessage={errors.email?.message}
-            />
-            <Input
-              defaultValue=""
-              label="Password"
-              variant="bordered"
-              type="password"
-              {...register("password")}
-              isInvalid={!!errors.password}
-              errorMessage={errors.password?.message}
-            />
+           <UserDetailsForm />
             {errors.root?.serverError && (
               <p className="text-danger text-sm">
                 {errors.root.serverError.message}
@@ -86,10 +61,13 @@ export default function RegisterForm() {
             </Button>
           </div>
         </form>
+       </FormProvider>
       </CardBody>
     </Card>
   );
 }
+
+
 
 /**
  errors: Comes from useForm() of react-hook-form, it contains all the validation errors.

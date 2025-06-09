@@ -4,16 +4,18 @@ import usePaginationStore from '@/hooks/usePaginationStore';
 import { Pagination } from '@heroui/react';
 import clsx from 'clsx';
 import { useEffect } from 'react';
+import { useShallow } from 'zustand/shallow';
 
-export default function PaginationComponent() {
-    const totalCount = 20;
+export default function PaginationComponent({totalCount}: {totalCount: number}) {
     
-    const {setPage, setPageSize, setPagination, pagination} = usePaginationStore(state => ({
+    const {setPage, setPageSize, setPagination, pagination} = usePaginationStore(
+        useShallow(
+        state => ({
         setPage: state.setPage,
         setPageSize: state.setPageSize,
         setPagination: state.setPagination,
         pagination: state.pagination
-    }));
+    })));
 
      const {pageNumber, pageSize, totalPages} = pagination;
 

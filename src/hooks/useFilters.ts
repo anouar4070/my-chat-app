@@ -2,7 +2,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { FaMale, FaFemale } from "react-icons/fa";
 import useFilterStore from "./useFilterStore";
-import { useEffect, useTransition } from "react";
+import { ChangeEvent, useEffect, useTransition } from "react";
 import { Selection } from "@heroui/react";
 import usePaginationStore from "./usePaginationStore";
 import { useShallow } from "zustand/shallow";
@@ -27,13 +27,13 @@ const {filters, setFilters} = useFilterStore();
     })));
 
 
-const {gender, ageRange, orderBy} = filters;
+const {gender, ageRange, orderBy, withPhoto} = filters;
 
 useEffect(() => {
- if(gender || ageRange || orderBy) {
+ if(gender || ageRange || orderBy || withPhoto) {
  setPage(1)
  }
-}, [gender, ageRange, orderBy, setPage])
+}, [gender, ageRange, orderBy, setPage, withPhoto])
 
 
 useEffect(() => {
@@ -45,12 +45,13 @@ useEffect(() => {
   if(orderBy) searchParams.set('orderBy', orderBy);
   if(pageSize) searchParams.set('pageSize', pageSize.toString());
   if(pageNumber) searchParams.set('pageNumber', pageNumber.toString());
+  searchParams.set('withPhoto', withPhoto.toString())
 
 
   router.replace(`${pathname}?${searchParams}`);
   })
  
-}, [gender, ageRange, orderBy, pathname, router, pageNumber, pageSize])
+}, [gender, ageRange, orderBy, pathname, router, pageNumber, pageSize, withPhoto])
 
 
     const orderByList = [
@@ -80,12 +81,17 @@ useEffect(() => {
     else setFilters('gender', [...gender, value]);
     };
 
+      const handleWithPhotoToggle = (e: ChangeEvent<HTMLInputElement>) => {
+          setFilters('withPhoto', e.target.checked);
+    };
+
     return {
       orderByList,
       genderList,
       selectAge: handleAgeSelect,
       selectGender: handleGenderSelect,
       selectOrder: handleOrderSelect,
+      selectWithPhoto: handleWithPhotoToggle,
       filters,
       isPending,
       totalCount

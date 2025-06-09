@@ -26,11 +26,12 @@ export const useMessages = (initialMessages: MessageDto[], nextCursor?: string) 
 
   useEffect(() => {
     set(initialMessages);
+    cursorRef.current = nextCursor;
 
     return () => {
      resetMessages();
     };
-  }, [initialMessages, resetMessages, set]);
+  }, [initialMessages, resetMessages, set, nextCursor]);
 
   const loadMore = useCallback(async() => {
 if(cursorRef.current) {

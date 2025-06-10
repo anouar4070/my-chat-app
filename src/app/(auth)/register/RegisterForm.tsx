@@ -13,16 +13,21 @@ import {
 } from "@/lib/schemas/registerSchema";
 import UserDetailsForm from "./UserDetailsForm";
 import ProfileForm from "./ProfileForm";
+import { registerUser } from "@/app/actions/authActions";
+import { handleFormServerErrors } from "@/lib/util";
+import { useRouter } from "next/navigation";
+import { ZodTypeAny } from "zod";
 
 const stepSchemas = [registerSchema, profileSchema];
 
 export default function RegisterForm() {
+  const router = useRouter();
   const [activeStep, setActiveStep] = useState(0);
   const currentValidationSchema = stepSchemas[activeStep];
 
   const methods = useForm<RegisterSchema>({
-    resolver: zodResolver(currentValidationSchema),
-    mode: "onTouched",
+    resolver: zodResolver(currentValidationSchema as ZodTypeAny),
+    mode: "onTouched"
   });
 
   const {
@@ -32,14 +37,13 @@ export default function RegisterForm() {
     getValues
   } = methods;
 
-  const onSubmit = async (data: RegisterSchema) => {
-    console.log(getValues())
-    // const result = await registerUser(data);
-    // if (result.status === "success") {
-    //   console.log("User registered successfully");
-    // } else {
-    //   handleFormServerErrors(result, setError);
-    // }
+  const onSubmit = async () => {
+    const result = await registerUser(getValues());
+    if (result.status === "success") {
+      router.push('/register/success');
+    } else {
+      handleFormServerErrors(result, setError);
+    }
   };
 
   const getStepContent = (step: number) => {

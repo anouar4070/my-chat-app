@@ -1,6 +1,7 @@
 "use server";
 
 import { auth, signIn, signOut } from "@/auth";
+import { sendVerificationEmail } from "@/lib/mail";
 import { prisma } from "@/lib/prisma";
 import { LoginSchema } from "@/lib/schemas/loginSchema";
 import { combinedRegisterSchema, RegisterSchema } from "@/lib/schemas/registerSchema";
@@ -21,7 +22,7 @@ if (!existingUser || !existingUser.email) return { status: "error", error: "Inva
 if(!existingUser.emailVerified) {
   const token = await generateToken(existingUser.email, TokenType.VERIFICATION);
 
-  //* Send user email
+  await sendVerificationEmail(token.email, token.token);
 
   return { status: "error", error: "Please verify your email address before logging in" }
 }
@@ -92,7 +93,7 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
 
 const verificationToken = await generateToken(email, TokenType.VERIFICATION );
 
-//* Send them an email
+ await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
     return { status: "success", data: user };
   } catch (error) {

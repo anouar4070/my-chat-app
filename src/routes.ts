@@ -4,4 +4,5 @@ export const authRoutes = [
   "/login",
    "/register",
    "/register/success",
+   "/verify-email",
 ];

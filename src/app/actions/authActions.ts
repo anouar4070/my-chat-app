@@ -4,8 +4,11 @@ import { auth, signIn, signOut } from "@/auth";
 import { sendVerificationEmail } from "@/lib/mail";
 import { prisma } from "@/lib/prisma";
 import { LoginSchema } from "@/lib/schemas/loginSchema";
-import { combinedRegisterSchema, RegisterSchema } from "@/lib/schemas/registerSchema";
-import { generateToken } from "@/lib/tokens";
+import {
+  combinedRegisterSchema,
+  RegisterSchema,
+} from "@/lib/schemas/registerSchema";
+import { generateToken, getTokenByToken } from "@/lib/tokens";
 import { ActionResult } from "@/types";
 import { TokenType, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
@@ -15,17 +18,24 @@ export async function signInUser(
   data: LoginSchema
 ): Promise<ActionResult<string>> {
   try {
-const existingUser = await getUserByEmail(data.email);
+    const existingUser = await getUserByEmail(data.email);
 
-if (!existingUser || !existingUser.email) return { status: "error", error: "Invalid credentials" }
+    if (!existingUser || !existingUser.email)
+      return { status: "error", error: "Invalid credentials" };
 
-if(!existingUser.emailVerified) {
-  const token = await generateToken(existingUser.email, TokenType.VERIFICATION);
+    if (!existingUser.emailVerified) {
+      const token = await generateToken(
+        existingUser.email,
+        TokenType.VERIFICATION
+      );
 
-  await sendVerificationEmail(token.email, token.token);
+      await sendVerificationEmail(token.email, token.token);
 
-  return { status: "error", error: "Please verify your email address before logging in" }
-}
+      return {
+        status: "error",
+        error: "Please verify your email address before logging in",
+      };
+    }
 
     const result = await signIn("credentials", {
       email: data.email,
@@ -54,7 +64,9 @@ export async function signOutUser() {
   await signOut({ redirectTo: "/" });
 }
 
-export async function registerUser(data: RegisterSchema): Promise<ActionResult<User>> {
+export async function registerUser(
+  data: RegisterSchema
+): Promise<ActionResult<User>> {
   try {
     const validated = combinedRegisterSchema.safeParse(data);
 
@@ -62,7 +74,16 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
       return { status: "error", error: validated.error.errors };
     }
 
-    const { name, email, password, gender, description, dateOfBirth, city, country } = validated.data;
+    const {
+      name,
+      email,
+      password,
+      gender,
+      description,
+      dateOfBirth,
+      city,
+      country,
+    } = validated.data;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -85,15 +106,21 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
             city,
             country,
             dateOfBirth: new Date(dateOfBirth),
-            gender
-          }
-        }
+            gender,
+          },
+        },
       },
     });
 
-const verificationToken = await generateToken(email, TokenType.VERIFICATION );
+    const verificationToken = await generateToken(
+      email,
+      TokenType.VERIFICATION
+    );
 
- await sendVerificationEmail(verificationToken.email, verificationToken.token);
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
+    );
 
     return { status: "success", data: user };
   } catch (error) {
@@ -117,4 +144,41 @@ export async function getAuthUserId() {
   if (!userId) throw new Error("Unauthorized");
 
   return userId;
+}
+
+export async function verifyEmail(
+  token: string
+): Promise<ActionResult<string>> {
+  try {
+    const existingToken = await getTokenByToken(token);
+
+    if (!existingToken) {
+      return { status: "error", error: "Invalid token" };
+    }
+
+    const hasExpired = new Date() > existingToken.expires;
+
+    if (hasExpired) {
+      return { status: "error", error: "Token has expired" };
+    }
+
+    const existingUser = await getUserByEmail(existingToken.email);
+
+    if (!existingUser) {
+      return { status: "error", error: "User not found" };
+    }
+
+    await prisma.user.update({
+      where: { id: existingUser.id },
+      data: { emailVerified: new Date() },
+    });
+
+    await prisma.token.delete({ where: { id: existingToken.id } });
+
+    return { status: "success", data: "Success" };
+    
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }

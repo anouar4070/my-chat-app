@@ -18,17 +18,17 @@ export async function sendVerificationEmail(email: string, token: string) {
     })
 }
 
-// export async function sendPasswordResetEmail(email: string, token: string) {
-//     const link = `${baseUrl}/reset-password?token=${token}`;
+export async function sendPasswordResetEmail(email: string, token: string) {
+    const link = `${baseUrl}/reset-password?token=${token}`;
 
-//     return resend.emails.send({
-//         from: 'mail@nextmatch.trycatchlearn.com',
-//         to: email,
-//         subject: 'Reset your password',
-//         html: `
-//             <h1>You have requested to reset your password</h1>
-//             <p>Click the link below to reset password</p>
-//             <a href="${link}">Reset password</a>
-//         `
-//     })
-// }
+    return resend.emails.send({
+        from: 'testing@resend.dev',
+        to: email,
+        subject: 'Reset your password',
+        html: `
+            <h1>You have requested to reset your password</h1>
+            <p>Click the link below to reset password</p>
+            <a href="${link}">Reset password</a>
+        `
+    })
+}

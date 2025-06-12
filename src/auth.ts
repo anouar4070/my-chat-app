@@ -9,19 +9,7 @@ export const { handlers: {GET, POST}, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({user, token}) {
       if (user) {
-//         console.log({user})
-//         {
-//   user: {
-//     id: 'cmbte5al50000uk00dkt0i4jn',
-//     name: 'anouar4070',
-//     email: 'g.anouar@yahoo.com',
-//     emailVerified: null,
-//     passwordHash: null,
-//     image: 'https://avatars.githubusercontent.com/u/159817067?v=4',
-//     profileComplete: false
-//   }
-// }
-token.profileComplete = user.profileComplete
+          token.profileComplete = user.profileComplete
       }
       return token;
     },
@@ -31,9 +19,6 @@ if(token.sub && session.user) {
   session.user.id = token.sub;
   session.user.profileComplete = token.profileComplete as boolean;
 }
-      //console.log({token});
-      //console.log({session});
-
       return session;
     }
   },
@@ -41,6 +26,26 @@ if(token.sub && session.user) {
   session: { strategy: "jwt" },
   ...authConfig,
 } as NextAuthConfig)
+
+
+
+
+
+
+/**
+         console.log({user})
+        {
+  user: {
+    id: 'cmbte5al50000uk00dkt0i4jn',
+    name: 'anouar4070',
+    email: 'g.anouar@yahoo.com',
+    emailVerified: null,
+    passwordHash: null,
+    image: 'https://avatars.githubusercontent.com/u/159817067?v=4',
+    profileComplete: false
+  }
+}
+ */
 
 /**
      console.log({token});

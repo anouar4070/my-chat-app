@@ -6,7 +6,7 @@ import { useShallow } from "zustand/shallow";
 import { updateLastActive } from "@/app/actions/memberActions";
 
 // Custom React hook to manage a Pusher presence channel
-export const usePresenceChannel = (userId: string | null) => {
+export const usePresenceChannel = (userId: string | null, profileComplete: boolean) => {
   // Extract set, add, and remove functions from the presence store
   const { set, add, remove } = usePresenceStore(
     useShallow(
@@ -48,7 +48,7 @@ export const usePresenceChannel = (userId: string | null) => {
 
   // Effect runs on mount to subscribe to the Pusher presence channel
   useEffect(() => {
-    if(!userId) return;
+    if(!userId || !profileComplete) return;
     if (!channelRef.current) {
       // Subscribe to the 'presence-nm' channel
       channelRef.current = pusherClient.subscribe("presence-nm");
@@ -86,5 +86,5 @@ export const usePresenceChannel = (userId: string | null) => {
         channelRef.current.unbind_all();
       }
     };
-  }, [handleAddMember, handleRemoveMember, handleSetMembers, userId]);
+  }, [handleAddMember, handleRemoveMember, handleSetMembers, userId, profileComplete]);
 };

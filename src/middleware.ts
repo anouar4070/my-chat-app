@@ -9,10 +9,18 @@ export default auth((req) => {
   const isPublic = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isProfileComplete = req.auth?.user.profileComplete;
+  const isAdmin = req.auth?.user.role === 'ADMIN';
+  const isAdminRoute = nextUrl.pathname.startsWith('/admin');
 
-  if (isPublic) {
+  if (isPublic || isAdmin) {
     return NextResponse.next();
   }
+
+  
+  if (isAdminRoute && !isAdmin) {
+    return NextResponse.redirect(new URL("/", nextUrl));
+  }
+
 
   if (isAuthRoute) {
     if (isLoggedIn) {
@@ -32,6 +40,8 @@ export default auth((req) => {
   return NextResponse.next();
 });
 
+
+// "Execute the middleware on all routes except those that start with /api, /_next/static, /_next/image, /images, or favicon.ico."
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)']
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
 }

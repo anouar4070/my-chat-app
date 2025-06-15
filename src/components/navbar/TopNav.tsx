@@ -42,7 +42,7 @@ const links = session?.user.role === 'ADMIN' ? adminLinks : memberLinks;
       </NavbarBrand>
       <NavbarContent justify="center">
         
-        {links.map(item => (
+        {session && links.map(item => (
     <NavLink key={item.href}  href={item.href} label={item.label} />
         ))}
     

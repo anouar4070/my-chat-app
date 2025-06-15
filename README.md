@@ -52,7 +52,7 @@ A **real-world full-stack chat application** built with **Next.js 14**, using mo
 
 | Tech              | Purpose                              |
 |-------------------|--------------------------------------|
-| **Next.js 14**    | Full-stack React framework (App Router) |
+| **Next.js 15**    | Full-stack React framework (App Router) |
 | **NextAuth v5**   | Authentication via Google OAuth      |
 | **Prisma ORM**    | Type-safe ORM for PostgreSQL         |
 | **PostgreSQL**    | Relational DB (hosted on Neon.tech)  |

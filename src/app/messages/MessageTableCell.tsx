@@ -1,7 +1,8 @@
+import AppModal from "@/components/AppModal";
 import PresenceAvatar from "@/components/PresenceAvatar";
 import { truncateString } from "@/lib/util";
 import { MessageDto } from "@/types";
-import { Button } from "@heroui/react";
+import { Button, ButtonProps, useDisclosure } from "@heroui/react";
 import React from "react";
 import { AiFillDelete } from "react-icons/ai";
 
@@ -22,6 +23,12 @@ export default function MessageTableCell({
   isDeleting,
 }: Props) {
   const cellValue = item[columnKey as keyof MessageDto];
+  const {isOpen, onOpen, onClose} = useDisclosure();
+
+  const footerButtons: ButtonProps[] = [
+    {color: 'default', onClick: onClose, children: 'Close'},
+    {color: 'secondary', onClick: onClose, children: 'Submit'},
+  ]
 
   switch (columnKey) {
     case "recipientName":
@@ -36,19 +43,28 @@ export default function MessageTableCell({
         </div>
       );
     case "text":
-      return <div>{truncateString(cellValue, 80)}</div>; // truncate long text
+      return <div>{truncateString(cellValue, 80)}</div> // truncate long text
     case "created":
-      return cellValue; // just show the date/time
+      return <div>{cellValue}</div>; // just show the date/time
     default:
       return (
+      <>
         <Button
           isIconOnly
           variant="light"
-          onPress={() => deleteMessage(item)}
+          onPress={() => onOpen()}
           isLoading={isDeleting}
         >
           <AiFillDelete size={24} className="text-danger" />
         </Button>
+        <AppModal
+        isOpen={isOpen}
+        onClose={onClose}
+        header='Test modal'
+        body={<div>Just testing</div>}
+        footerButtons={footerButtons}
+        />
+      </>
       );
   }
 }

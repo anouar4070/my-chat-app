@@ -9,6 +9,7 @@ type MessageWithSenderRecipient = Prisma.MessageGetPayload<{
   select: {
     id: true;
     text: true;
+    created: true,
     dateRead: true;
     sender: {
       select: { userId; name; image };

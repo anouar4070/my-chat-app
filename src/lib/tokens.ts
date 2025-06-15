@@ -1,6 +1,6 @@
 import { TokenType } from '@prisma/client';
 import { prisma } from './prisma';
-import { randomBytes } from 'crypto';
+//import { randomBytes } from 'crypto';
 
 export async function getTokenByEmail(email: string) {
     try {

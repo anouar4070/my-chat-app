@@ -8,7 +8,7 @@ type FilterState = {
   // 'setFilters' is a function to update a specific filter by name
   setFilters: (
     filterName: keyof FilterState["filters"], // name of the filter to update
-    value: string | number[] | string[]       // new value for the filter
+    value: string | number[] | string[] | boolean       // new value for the filter
   ) => void;
 };
 

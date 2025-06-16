@@ -69,41 +69,42 @@ A **real-world full-stack chat application** built with **Next.js 14**, using mo
 
 <details>
 <summary>📂 Project Structure</summary>
-📦 root/
-│
-├── .env ← Environment variables
-├── .env.example ← Example env file
-├── package.json ← Project metadata and scripts
-├── tailwind.config.ts ← Tailwind CSS setup
-├── tsconfig.json ← TypeScript configuration
-├── README.md ← Project documentation
-│
-├── prisma/ ← Prisma ORM setup
-│ ├── schema.prisma ← Database schema
-│ ├── seed.ts ← Seed data script
-│ ├── membersData.ts ← Demo member data
-│ └── migrations/ ← DB migration history
-│
-├── public/ ← Static assets (images, icons, etc.)
-│
-├── src/
-│ ├── app/ ← App routes (Next.js App Router)
-│ │ ├── (auth)/ ← Auth pages (login, register, etc.)
-│ │ ├── members/ ← Member profiles and chat
-│ │ ├── messages/ ← Messaging features
-│ │ ├── admin/ ← Admin dashboard
-│ │ ├── api/ ← API endpoints
-│ │ ├── layout.tsx ← Root layout
-│ │ ├── page.tsx ← Main homepage
-│ │ ├── globals.css ← Global styles
-│ │ └── error.tsx ← Error page
-│
-│ ├── components/ ← Reusable UI components
-│ ├── hooks/ ← Custom React hooks
-│ ├── lib/ ← Utilities (mail, prisma, pusher, etc.)
-│ ├── types/ ← TypeScript type definitions
-│ ├── auth.ts ← NextAuth logic
-│ ├── auth.config.ts ← NextAuth configuration
-│ ├── middleware.ts ← Middleware setup
-│ └── routes.ts ← App route constants
+<div>📦 root/</div>
+<div>│</div>
+<div>├── 🔒 .env # Environment variables</div>
+<div>├── 📄 .env.example # Example environment file</div>
+<div>├── 📄 package.json # Project metadata and scripts</div>
+<div>├── 📄 tailwind.config.ts # Tailwind CSS configuration</div>
+<div>├── 📄 tsconfig.json # TypeScript configuration</div>
+<div>├── 📄 README.md # Project documentation</div>
+<div>│</div>
+<div>├── 📂 prisma/ # Prisma ORM files</div>
+<div>│ ├── 📄 schema.prisma # Database schema definition</div>
+<div>│ ├── 📄 seed.ts # Seed data scripts</div>
+<div>│ ├── 📄 membersData.ts # Sample members data</div>
+<div>│ └── 📂 migrations/ # Database migration history</div>
+<div>│</div>
+<div>├── 📂 public/ # Static assets (images, icons, etc.)</div>
+<div>│</div>
+<div>├── 📂 src/ # Source code</div>
+<div>│ ├── 📂 app/ # Next.js App Router (pages & routes)</div>
+<div>│ │ ├── 📂 (auth)/ # Authentication related pages</div>
+<div>│ │ ├── 📂 members/ # Member profiles and chats</div>
+<div>│ │ ├── 📂 messages/ # Messaging features</div>
+<div>│ │ ├── 📂 admin/ # Admin dashboard and tools</div>
+<div>│ │ ├── 📂 api/ # API endpoints</div>
+<div>│ │ ├── 📄 layout.tsx # Root layout component</div>
+<div>│ │ ├── 📄 page.tsx # Main homepage</div>
+<div>│ │ ├── 📄 globals.css # Global CSS styles</div>
+<div>│ │ └── 📄 error.tsx # Custom error page</div>
+<div>│ │</div>
+<div>│ ├── 📂 components/ # Reusable UI components</div>
+<div>│ ├── 📂 hooks/ # Custom React hooks</div>
+<div>│ ├── 📂 lib/ # Utilities and helpers</div>
+<div>│ ├── 📂 types/ # TypeScript type definitions</div>
+<div>│ ├── 📄 auth.ts # NextAuth logic</div>
+<div>│ ├── 📄 auth.config.ts # NextAuth configuration</div>
+<div>│ ├── 📄 middleware.ts # Middleware logic</div>
+<div>│ └── 📄 routes.ts # Route constants</div>
+
 </details>

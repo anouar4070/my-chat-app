@@ -66,3 +66,44 @@ A **real-world full-stack chat application** built with **Next.js 14**, using mo
 | **Vercel**        | Hosting and deployment               |
 
 ---
+
+<details>
+<summary>📂 Project Structure</summary>
+📦 root/
+│
+├── .env ← Environment variables
+├── .env.example ← Example env file
+├── package.json ← Project metadata and scripts
+├── tailwind.config.ts ← Tailwind CSS setup
+├── tsconfig.json ← TypeScript configuration
+├── README.md ← Project documentation
+│
+├── prisma/ ← Prisma ORM setup
+│ ├── schema.prisma ← Database schema
+│ ├── seed.ts ← Seed data script
+│ ├── membersData.ts ← Demo member data
+│ └── migrations/ ← DB migration history
+│
+├── public/ ← Static assets (images, icons, etc.)
+│
+├── src/
+│ ├── app/ ← App routes (Next.js App Router)
+│ │ ├── (auth)/ ← Auth pages (login, register, etc.)
+│ │ ├── members/ ← Member profiles and chat
+│ │ ├── messages/ ← Messaging features
+│ │ ├── admin/ ← Admin dashboard
+│ │ ├── api/ ← API endpoints
+│ │ ├── layout.tsx ← Root layout
+│ │ ├── page.tsx ← Main homepage
+│ │ ├── globals.css ← Global styles
+│ │ └── error.tsx ← Error page
+│
+│ ├── components/ ← Reusable UI components
+│ ├── hooks/ ← Custom React hooks
+│ ├── lib/ ← Utilities (mail, prisma, pusher, etc.)
+│ ├── types/ ← TypeScript type definitions
+│ ├── auth.ts ← NextAuth logic
+│ ├── auth.config.ts ← NextAuth configuration
+│ ├── middleware.ts ← Middleware setup
+│ └── routes.ts ← App route constants
+</details>

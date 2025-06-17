@@ -50,13 +50,28 @@ async function seedAdmin() {
   })
 }
 
-async function main() {
-  if(process.env.RUN_SEED === 'true' || process.env.NODE_ENV === 'development') {
-  await seedMembers();
-  await seedAdmin();
-  }
+// async function main() {
+//   if(process.env.RUN_SEED === 'true' || process.env.NODE_ENV === 'development') {
+//   await seedMembers();
+//   await seedAdmin();
+//   }
 
+// }
+
+async function main() {
+  console.log("Seed script started", process.env.NODE_ENV, process.env.RUN_SEED);
+  if(process.env.RUN_SEED === 'true' || process.env.NODE_ENV === 'development') {
+    console.log("Seeding members...");
+    await seedMembers();
+    console.log("Seeding admin...");
+    await seedAdmin();
+    console.log("Seeding complete.");
+  } else {
+    console.log("Skipping seeding.");
+  }
 }
+
+
 
 main()
   .catch((e) => {

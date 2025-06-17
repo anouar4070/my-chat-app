@@ -22,7 +22,10 @@ A **real-world full-stack chat application** built with **Next.js 14**, using mo
 
 - 📧 **Email verification with Resend**
   - Sends confirmation links when users register
-  - Integrated with Next.js server actions
+  - Integrated with Next.js server actions  
+  > 💡 When a user creates an account for the first time, a verification email will be sent from the domain **my-chat-app.space** (a domain owned by the app creator) to confirm the provided email address.  
+  > This functionality is powered by **Resend** and made possible thanks to domain configuration through **GoDaddy**.
+
 
 - 💬 **Real-time messaging with Pusher**
   - Instantly receive new messages and typing indicators

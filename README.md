@@ -6,10 +6,6 @@ A **real-world full-stack chat application** built with **Next.js 14**, using mo
 
 ## 🚀 Live Demo
 
-👉 [Try the app here](https://my-chat-app-eta-ruddy.vercel.app/login)
-
-## 🚀 Live Demo
-
 🌐 Check out the app in action:
 
 [![Visit Live Demo](https://img.shields.io/badge/🚀%20Live%20App-Click%20to%20Open-brightgreen?style=for-the-badge&logo=vercel)](https://my-chat-app-eta-ruddy.vercel.app/login)

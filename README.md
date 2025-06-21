@@ -21,6 +21,7 @@ A **real-world full-stack chat application** built with **Next.js 14**, using mo
 
 - 🧬 **Database Integration with Prisma + PostgreSQL**
   - Fully typed DB access via Prisma ORM
+  - Querying and mutating data via server actions
   - Deployed on [Neon.tech](https://neon.tech)
 
 - 📧 **Email verification with Resend**

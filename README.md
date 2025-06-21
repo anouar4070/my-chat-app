@@ -75,6 +75,7 @@ A **real-world full-stack chat application** built with **Next.js 14**, using mo
 | **Prisma ORM**    | Type-safe ORM for PostgreSQL         |
 | **PostgreSQL**    | Relational DB (hosted on Neon.tech)  |
 | **TailwindCSS**   | Utility-first CSS framework          |
+| **HeroUI**        | Prebuilt UI components for TailwindCSS |
 | **NextUI**        | UI library for React + Tailwind      |
 | **Pusher**        | Real-time messaging & subscriptions  |
 | **Resend**        | Email sending service for verification |

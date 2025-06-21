@@ -30,7 +30,6 @@ A **real-world full-stack chat application** built with **Next.js 14**, using mo
   > 💡 When a user creates an account for the first time, a verification email will be sent from the domain **my-chat-app.space** (a domain owned by the app creator) to confirm the provided email address.  
   > This functionality is powered by **Resend** and made possible thanks to domain configuration through **GoDaddy**.
 
-
 - 💬 **Real-time messaging with Pusher**
   - Instantly receive new messages and typing indicators
   - WebSocket-powered channel system
@@ -38,9 +37,21 @@ A **real-world full-stack chat application** built with **Next.js 14**, using mo
 - 📦 **Form validation with Zod**
   - Type-safe, schema-based input validation
 
+- 📨 Email verification + Forgot Password
+    - Sends confirmation links when users register
+    - Password reset with secure email flow
+
+    💡 When a user creates an account for the first time, a verification email will be sent from the domain my-chat-app.space (a domain owned by the app creator) to confirm the        provided email address.
+     This functionality is powered by Resend and made possible thanks to domain configuration through GoDaddy.
+
+- 📸 Image Uploading
+     - Upload and manage user avatars and media
+
+
 - 🎨 **Responsive UI with TailwindCSS + NextUI**
-  - Component-driven layout with accessible design
-  - Dark mode and mobile-friendly out-of-the-box
+  - Beautiful components and layouts using HeroUI and NextUI
+  - Fully responsive, mobile-first design
+  - Dark mode supported
 
 - ⚡️ **Next.js App Router + Server Actions**
   - Optimized routing, layouts, loading states

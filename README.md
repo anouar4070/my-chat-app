@@ -1,4 +1,4 @@
-# 💬 My Chat App
+# 💬 My Chat App you
 
 A **real-world full-stack chat application** built with **Next.js 14**, using modern tools and best practices to deliver a fast, scalable, and feature-rich experience.
 

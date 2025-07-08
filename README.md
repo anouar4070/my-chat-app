@@ -15,7 +15,7 @@ A **real-world full-stack chat application** built with **Next.js 14**, using mo
 
 ## ✨ Features
 
-- 🔐 **Authentication with NextAuth v5**
+- 🔐 **Authentication with AuthJS**
   - Google OAuth login
   - Secure, session-based access control
 

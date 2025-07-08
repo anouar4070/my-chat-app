@@ -48,8 +48,8 @@ A **real-world full-stack chat application** built with **Next.js 15**, using mo
      - Upload and manage user avatars and media
 
 
-- 🎨 **Responsive UI with TailwindCSS + NextUI**
-  - Beautiful components and layouts using HeroUI and NextUI
+- 🎨 **Responsive UI with TailwindCSS + HeroUI**
+  - Beautiful components and layouts using TailwindCSS and HeroUI
   - Fully responsive, mobile-first design
   - Dark mode supported
 
